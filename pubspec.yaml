@@ -50,8 +50,7 @@ dependencies:
   # 分享功能
   share_plus: ^10.1.2
 
-  # 屏幕亮度控制
-  screen_brightness: ^1.0.1
+
 
 dev_dependencies:
   flutter_test:

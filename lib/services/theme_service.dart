@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-import 'package:screen_brightness/screen_brightness.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'preferences_service.dart';
 
@@ -155,26 +154,12 @@ class ThemeService {
   /// 应用亮度设置
   Future<void> applyBrightnessSettings() async {
     try {
-      // 只在移动端设置亮度，Web端不支持
-      if (!kIsWeb) {
-        if (shouldUseDarkTheme()) {
-          // 夜间模式：降低亮度
-          await ScreenBrightness().setScreenBrightness(nightBrightness);
-        } else {
-          // 白天模式：恢复系统亮度
-          await ScreenBrightness().resetScreenBrightness();
-        }
-      }
-
       // 保持屏幕常亮
       if (_prefsService.isKeepScreenOn()) {
         await WakelockPlus.enable();
       }
     } catch (e) {
-      // 在Web环境中这是正常的，不需要打印错误
-      if (!kIsWeb) {
-        // Debug: print('设置亮度失败: $e');
-      }
+      // Debug: print('设置屏幕常亮失败: $e');
     }
   }
 
