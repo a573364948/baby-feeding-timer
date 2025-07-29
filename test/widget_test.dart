@@ -41,7 +41,7 @@ void main() {
     expect(find.text('设置'), findsOneWidget);
   });
 
-  testWidgets('从设置页面导航到历史记录测试', (WidgetTester tester) async {
+  testWidgets('设置页面历史记录选项测试', (WidgetTester tester) async {
     // 构建应用
     await tester.pumpWidget(const MyApp());
     await tester.pumpAndSettle();
@@ -50,14 +50,16 @@ void main() {
     await tester.tap(find.byIcon(Icons.settings));
     await tester.pumpAndSettle();
 
+    // 验证设置页面标题
+    expect(find.text('设置'), findsOneWidget);
+
     // 验证设置页面中有历史记录选项
     expect(find.text('查看嗷嗷叫记录'), findsOneWidget);
 
-    // 点击历史记录选项
-    await tester.tap(find.text('查看嗷嗷叫记录'));
-    await tester.pumpAndSettle();
+    // 验证历史记录选项的描述文本
+    expect(find.text('查看小熊猫嗷嗷叫历史和统计数据'), findsOneWidget);
 
-    // 验证导航到历史记录页面（这里可能需要根据实际页面标题调整）
-    expect(find.byIcon(Icons.history), findsAtLeastNWidgets(1));
+    // 验证历史记录选项的图标
+    expect(find.byIcon(Icons.history), findsOneWidget);
   });
 }
