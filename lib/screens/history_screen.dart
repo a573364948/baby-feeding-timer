@@ -81,7 +81,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
           Container(
             width: double.infinity,
             padding: const EdgeInsets.all(16),
-            color: Theme.of(context).colorScheme.primary.withOpacity(0.1),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
             child: Column(
               children: [
                 Text(
@@ -161,7 +161,7 @@ class _HistoryScreenState extends State<HistoryScreen> {
                                 children: [
                                   if (record.amountPrepared != null || record.amountConsumed != null)
                                     Text(
-                                      '${record.amountPrepared != null ? "准备了${record.amountPrepared}ml竹子" : ""}'
+                                      '${record.amountPrepared != null ? "准备了${record.amountPrepared}ml牛奶🥛" : ""}'
                                       '${record.amountPrepared != null && record.amountConsumed != null ? " / " : ""}'
                                       '${record.amountConsumed != null ? "小熊猫吃了${record.amountConsumed}ml" : ""}',
                                     ),

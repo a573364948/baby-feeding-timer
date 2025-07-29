@@ -27,7 +27,7 @@ class ShareService {
       );
     } catch (e) {
       // 分享失败时的处理
-      print('分享失败: $e');
+      // Debug: print('分享失败: $e');
     }
   }
 
@@ -170,7 +170,7 @@ class ShareService {
         subject: '小熊猫嗷嗷叫记录 🐼',
       );
     } catch (e) {
-      print('分享失败: $e');
+      // Debug: print('分享失败: $e');
     }
   }
 }

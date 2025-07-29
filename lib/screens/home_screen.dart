@@ -219,9 +219,11 @@ class HomeScreen extends StatelessWidget {
       final totalAmount = await dbService.getTodayTotalAmount();
 
       if (records.isEmpty) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('今天小熊猫还没有嗷嗷叫哦 🐼')),
-        );
+        if (context.mounted) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('今天小熊猫还没有嗷嗷叫哦 🐼')),
+          );
+        }
         return;
       }
 
@@ -231,9 +233,11 @@ class HomeScreen extends StatelessWidget {
         totalAmount: totalAmount,
       );
     } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('分享失败: $e')),
-      );
+      if (context.mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('分享失败: $e')),
+        );
+      }
     }
   }
 }

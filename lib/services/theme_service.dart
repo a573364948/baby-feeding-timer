@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
+
 import 'package:screen_brightness/screen_brightness.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
 import 'preferences_service.dart';
@@ -84,12 +84,12 @@ class ThemeService {
         secondary: const Color(0xFFFFB74D),       // 浅橙色
         secondaryContainer: const Color(0xFF5D4037), // 深棕色
         surface: const Color(0xFF2E2E2E),         // 深灰表面
-        background: const Color(0xFF1A1A1A),      // 深棕黑背景
+        // background: const Color(0xFF1A1A1A),      // 深棕黑背景 (deprecated)
         error: const Color(0xFFFF6B6B),          // 温暖红色
         onPrimary: Colors.white,
         onSecondary: Colors.white,
         onSurface: const Color(0xFFE0E0E0),      // 浅灰文字
-        onBackground: const Color(0xFFE0E0E0),   // 浅灰文字
+        // onBackground: const Color(0xFFE0E0E0),   // 浅灰文字 (deprecated)
       ),
       cardColor: const Color(0xFF2E2E2E),         // 卡片颜色
       scaffoldBackgroundColor: const Color(0xFF1A1A1A), // 脚手架背景
@@ -173,7 +173,7 @@ class ThemeService {
     } catch (e) {
       // 在Web环境中这是正常的，不需要打印错误
       if (!kIsWeb) {
-        print('设置亮度失败: $e');
+        // Debug: print('设置亮度失败: $e');
       }
     }
   }
@@ -205,9 +205,9 @@ class ThemeService {
     switch (nightModeType) {
       case NightModeType.timeControl:
         if (isDark) {
-          return '夜间模式 🌙 (${nightStartHour}:00-${nightEndHour.toString().padLeft(2, '0')}:00)';
+          return '夜间模式 🌙 ($nightStartHour:00-${nightEndHour.toString().padLeft(2, '0')}:00)';
         } else {
-          return '白天模式 ☀️ (${nightStartHour}:00-${nightEndHour.toString().padLeft(2, '0')}:00)';
+          return '白天模式 ☀️ ($nightStartHour:00-${nightEndHour.toString().padLeft(2, '0')}:00)';
         }
       case NightModeType.followSystem:
         return isDark ? '夜间模式 🌙 (跟随系统)' : '白天模式 ☀️ (跟随系统)';
