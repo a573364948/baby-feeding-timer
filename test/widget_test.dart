@@ -21,21 +21,11 @@ void main() {
     // 验证开始倒计时按钮存在
     expect(find.text('开始倒计时'), findsOneWidget);
 
-    // 验证历史记录按钮存在
-    expect(find.text('历史记录'), findsOneWidget);
-  });
+    // 验证AppBar中的设置图标存在
+    expect(find.byIcon(Icons.settings), findsOneWidget);
 
-  testWidgets('导航到历史记录页面测试', (WidgetTester tester) async {
-    // 构建应用
-    await tester.pumpWidget(const MyApp());
-    await tester.pumpAndSettle();
-
-    // 点击历史记录按钮
-    await tester.tap(find.text('历史记录'));
-    await tester.pumpAndSettle();
-
-    // 验证导航到历史记录页面
-    expect(find.text('历史记录'), findsAtLeastNWidgets(1));
+    // 验证分享图标存在
+    expect(find.byIcon(Icons.share), findsOneWidget);
   });
 
   testWidgets('导航到设置页面测试', (WidgetTester tester) async {
@@ -49,5 +39,25 @@ void main() {
 
     // 验证导航到设置页面
     expect(find.text('设置'), findsOneWidget);
+  });
+
+  testWidgets('从设置页面导航到历史记录测试', (WidgetTester tester) async {
+    // 构建应用
+    await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
+
+    // 先导航到设置页面
+    await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+
+    // 验证设置页面中有历史记录选项
+    expect(find.text('查看嗷嗷叫记录'), findsOneWidget);
+
+    // 点击历史记录选项
+    await tester.tap(find.text('查看嗷嗷叫记录'));
+    await tester.pumpAndSettle();
+
+    // 验证导航到历史记录页面（这里可能需要根据实际页面标题调整）
+    expect(find.byIcon(Icons.history), findsAtLeastNWidgets(1));
   });
 }
