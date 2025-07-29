@@ -92,15 +92,15 @@ class ShareService {
         if (intervals.isNotEmpty) {
           final avgInterval = intervals.reduce((a, b) => a + b) / intervals.length;
           final avgHours = (avgInterval / 60).toStringAsFixed(1);
-          buffer.writeln('• 平均间隔：${avgHours}小时');
+          buffer.writeln('• 平均间隔：$avgHours小时');
           
           final maxInterval = intervals.reduce((a, b) => a > b ? a : b);
           final maxHours = (maxInterval / 60).toStringAsFixed(1);
-          buffer.writeln('• 最长间隔：${maxHours}小时');
+          buffer.writeln('• 最长间隔：$maxHours小时');
           
           final minInterval = intervals.reduce((a, b) => a < b ? a : b);
           final minHours = (minInterval / 60).toStringAsFixed(1);
-          buffer.writeln('• 最短间隔：${minHours}小时');
+          buffer.writeln('• 最短间隔：$minHours小时');
         }
         buffer.writeln('');
       }
