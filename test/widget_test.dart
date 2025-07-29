@@ -1,9 +1,6 @@
-// This is a basic Flutter widget test.
+// 小熊猫嗷嗷叫倒计时应用测试
 //
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
+// 测试应用的基本功能和UI元素
 
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -11,20 +8,46 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:baby_feeding_timer/main.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
-    // Build our app and trigger a frame.
+  testWidgets('小熊猫应用基本UI测试', (WidgetTester tester) async {
+    // 构建应用并触发一帧
     await tester.pumpWidget(const MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
+    // 等待异步初始化完成
+    await tester.pumpAndSettle();
 
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
+    // 验证应用标题存在
+    expect(find.text('小熊猫嗷嗷叫倒计时'), findsOneWidget);
 
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // 验证开始倒计时按钮存在
+    expect(find.text('开始倒计时'), findsOneWidget);
+
+    // 验证历史记录按钮存在
+    expect(find.text('历史记录'), findsOneWidget);
+  });
+
+  testWidgets('导航到历史记录页面测试', (WidgetTester tester) async {
+    // 构建应用
+    await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
+
+    // 点击历史记录按钮
+    await tester.tap(find.text('历史记录'));
+    await tester.pumpAndSettle();
+
+    // 验证导航到历史记录页面
+    expect(find.text('历史记录'), findsAtLeastNWidgets(1));
+  });
+
+  testWidgets('导航到设置页面测试', (WidgetTester tester) async {
+    // 构建应用
+    await tester.pumpWidget(const MyApp());
+    await tester.pumpAndSettle();
+
+    // 点击设置图标
+    await tester.tap(find.byIcon(Icons.settings));
+    await tester.pumpAndSettle();
+
+    // 验证导航到设置页面
+    expect(find.text('设置'), findsOneWidget);
   });
 }
