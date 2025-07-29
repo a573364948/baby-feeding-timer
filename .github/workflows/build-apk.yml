@@ -1,0 +1,98 @@
+name: Build Android APK
+
+on:
+  push:
+    branches: [ main, master ]
+  pull_request:
+    branches: [ main, master ]
+  workflow_dispatch:  # 允许手动触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      
+    - name: Setup Java
+      uses: actions/setup-java@v4
+      with:
+        distribution: 'temurin'
+        java-version: '17'
+        
+    - name: Setup Flutter
+      uses: subosito/flutter-action@v2
+      with:
+        flutter-version: '3.27.1'
+        channel: 'stable'
+        
+    - name: Install dependencies
+      run: flutter pub get
+      
+    - name: Analyze code
+      run: flutter analyze
+      
+    - name: Run tests
+      run: flutter test
+      
+    - name: Build APK (Debug)
+      run: flutter build apk --debug
+      
+    - name: Build APK (Release)
+      run: flutter build apk --release
+      
+    - name: Upload Debug APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: debug-apk
+        path: build/app/outputs/flutter-apk/app-debug.apk
+        
+    - name: Upload Release APK
+      uses: actions/upload-artifact@v4
+      with:
+        name: release-apk
+        path: build/app/outputs/flutter-apk/app-release.apk
+        
+    - name: Create Release
+      if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: v${{ github.run_number }}
+        name: Release v${{ github.run_number }}
+        body: |
+          🐼 小熊猫嗷嗷叫倒计时应用 - 完整功能版
+          
+          ## 📱 下载说明
+          - **app-release.apk**: 正式版本（推荐）
+          - **app-debug.apk**: 调试版本
+          
+          ## ✨ 完整功能特性
+          - 🕐 智能倒计时功能
+          - 🌙 夜间模式自动切换（时间控制/跟随系统）
+          - 📊 详细的喂奶记录统计
+          - 📱 完整分享功能（今日统计/历史记录/单条记录）
+          - 🎨 温暖的小熊猫主题设计
+          - 💾 本地数据持久化存储
+          - 🔆 屏幕亮度自动调节（移动端）
+          - 📱 屏幕常亮功能
+          - 📈 时间间隔智能分析
+          - 🎯 可自定义倒计时时长
+          
+          ## 🚀 安装方法
+          1. 下载 app-release.apk
+          2. 在安卓设备上安装
+          3. 开始使用！
+          
+          ## 🌙 夜间模式
+          - 自动在晚上8点到早上6点切换深色主题
+          - 支持跟随系统设置
+          - 温暖的深棕色配色方案
+          - 自动降低屏幕亮度（移动端）
+        files: |
+          build/app/outputs/flutter-apk/app-release.apk
+          build/app/outputs/flutter-apk/app-debug.apk
+        draft: false
+        prerelease: false
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
