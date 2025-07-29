@@ -1,4 +1,4 @@
-package com.example.baby_feeding_timer
+package com.pandatimer.baby_feeding_timer
 
 import io.flutter.embedding.android.FlutterActivity
 

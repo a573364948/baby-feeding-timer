@@ -1,4 +1,5 @@
-<manifest xmlns:android="http://schemas.android.com/apk/res/android">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.pandatimer.baby_feeding_timer">
     <application
         android:label="小熊猫嗷嗷叫倒计时"
         android:name="${applicationName}"
