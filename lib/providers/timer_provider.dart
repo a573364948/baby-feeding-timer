@@ -81,9 +81,9 @@ class TimerProvider with ChangeNotifier {
   }
 
   /// 开始倒计时
-  Future<void> startCountdown({int? amountPrepared, int? amountConsumed, String? notes}) async {
+  Future<void> startCountdown({int? amountPrepared, int? amountConsumed, String? notes, Duration? customDuration}) async {
     _startTime = DateTime.now();
-    _remainingTime = _defaultDuration;
+    _remainingTime = customDuration ?? _defaultDuration;
     _state = TimerState.countdown;
 
     // 保存喂奶记录

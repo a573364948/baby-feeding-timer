@@ -3,11 +3,13 @@ import 'package:flutter/services.dart';
 
 /// 喂奶信息输入对话框
 class FeedingInputDialog extends StatefulWidget {
-  final Function(int?, int?, String?) onConfirm;
+  final Function(int?, int?, String?, Duration?) onConfirm;
+  final Duration defaultDuration;
 
   const FeedingInputDialog({
     super.key,
     required this.onConfirm,
+    required this.defaultDuration,
   });
 
   @override
@@ -15,14 +17,19 @@ class FeedingInputDialog extends StatefulWidget {
 }
 
 class _FeedingInputDialogState extends State<FeedingInputDialog> {
-  final _preparedController = TextEditingController();
   final _consumedController = TextEditingController();
   final _notesController = TextEditingController();
   bool _skipInput = false;
+  late Duration _selectedDuration;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedDuration = widget.defaultDuration;
+  }
 
   @override
   void dispose() {
-    _preparedController.dispose();
     _consumedController.dispose();
     _notesController.dispose();
     super.dispose();
@@ -54,19 +61,19 @@ class _FeedingInputDialogState extends State<FeedingInputDialog> {
             if (!_skipInput) ...[
               const SizedBox(height: 16),
               
-              // 准备了多少
-              TextField(
-                controller: _preparedController,
-                decoration: const InputDecoration(
-                  labelText: '准备了多少竹子 (毫升)',
-                  hintText: '例如：120',
-                  border: OutlineInputBorder(),
-                  prefixIcon: Icon(Icons.local_drink),
+              // 倒计时时长选择
+              Container(
+                decoration: BoxDecoration(
+                  border: Border.all(color: Colors.grey),
+                  borderRadius: BorderRadius.circular(4),
                 ),
-                keyboardType: TextInputType.number,
-                inputFormatters: [
-                  FilteringTextInputFormatter.digitsOnly,
-                ],
+                child: ListTile(
+                  leading: const Icon(Icons.timer),
+                  title: const Text('倒计时时长'),
+                  subtitle: Text('${(_selectedDuration.inMinutes / 60).toStringAsFixed(1)} 小时'),
+                  trailing: const Icon(Icons.arrow_drop_down),
+                  onTap: _showDurationPicker,
+                ),
               ),
 
               const SizedBox(height: 16),
@@ -122,20 +129,58 @@ class _FeedingInputDialogState extends State<FeedingInputDialog> {
 
   void _onConfirm() {
     if (_skipInput) {
-      widget.onConfirm(null, null, null);
+      widget.onConfirm(null, null, null, null);
     } else {
-      final amountPrepared = _preparedController.text.isEmpty 
-          ? null 
-          : int.tryParse(_preparedController.text);
       final amountConsumed = _consumedController.text.isEmpty 
           ? null 
           : int.tryParse(_consumedController.text);
       final notes = _notesController.text.isEmpty 
           ? null 
           : _notesController.text;
+      final customDuration = _selectedDuration != widget.defaultDuration 
+          ? _selectedDuration 
+          : null;
       
-      widget.onConfirm(amountPrepared, amountConsumed, notes);
+      widget.onConfirm(null, amountConsumed, notes, customDuration);
     }
     Navigator.pop(context);
+  }
+
+  /// 显示时长选择器
+  void _showDurationPicker() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('选择倒计时时长'),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            _buildDurationOption(const Duration(hours: 2)),
+            _buildDurationOption(const Duration(minutes: 150)), // 2.5小时
+            _buildDurationOption(const Duration(hours: 3)),
+            _buildDurationOption(const Duration(minutes: 210)), // 3.5小时
+            _buildDurationOption(const Duration(hours: 4)),
+            _buildDurationOption(const Duration(hours: 5)),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildDurationOption(Duration duration) {
+    final hours = duration.inMinutes / 60;
+    final title = hours == hours.toInt() 
+        ? '${hours.toInt()} 小时'
+        : '${hours.toStringAsFixed(1)} 小时';
+    
+    return ListTile(
+      title: Text(title),
+      onTap: () {
+        setState(() {
+          _selectedDuration = duration;
+        });
+        Navigator.pop(context);
+      },
+    );
   }
 }

@@ -245,6 +245,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
               title: const Text('4 小时'),
               onTap: () => _setDuration(240),
             ),
+            ListTile(
+              title: const Text('5 小时'),
+              onTap: () => _setDuration(300),
+            ),
           ],
         ),
       ),
